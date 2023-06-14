@@ -184,7 +184,8 @@
 	ORDER BY 1;
 
 
--- 10. In the first week after a customer joins the program (including their join date) they earn 2x points on all items, not just sushi - how many points do customer A and B have at the end of January?
+-- 10. In the first week after a customer joins the program (including their join date) they earn 2x points on all items, not just sushi - 
+	--how many points do customer A and B have at the end of January?
 
 	WITH jan_points AS
 		(SELECT
@@ -214,7 +215,8 @@
 	GROUP BY 1 ;
 
 
--- 11. The following questions are related creating basic data tables that Danny and his team can use to quickly derive insights without needing to join the underlying tables using SQL.
+-- 11. The following questions are related creating basic data tables that Danny and his team can use to quickly derive insights without needing to join 
+	-- the underlying tables using SQL.
 
 	SELECT
 		S.customer_id,
@@ -233,7 +235,8 @@
 	ORDER BY 1, 2;
 
 
--- 12. Danny also requires further information about the ranking of customer products, but he purposely does not need the ranking for non-member purchases so he expects null ranking values for the records when customers are not yet part of the loyalty program.
+-- 12. Danny also requires further information about the ranking of customer products, but he purposely does not need the ranking 
+	-- for non-member purchases so he expects null ranking values for the records when customers are not yet part of the loyalty program.
 
 	SELECT
 		S.customer_id,
