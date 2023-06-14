@@ -2,7 +2,9 @@
 
 ## Case Study 1 - Danny's Diner
 
-**Query #1**
+### Challeng Questions and Solutions:
+
+1- What is the total amount each customer spent at the restaurant?
 
 ```sql
     SELECT
@@ -22,22 +24,4 @@
 | C           | 36           |
 
 ---
-**Query #2**
 
-```sql
-    SELECT
-        product_id,
-        product_name,
-        price
-    FROM dannys_diner.menu
-    ORDER BY price DESC
-    LIMIT 5;
-```
-
-| product_id | product_name | price |
-| ---------- | ------------ | ----- |
-| 2          | curry        | 15    |
-| 3          | ramen        | 12    |
-| 1          | sushi        | 10    |
-
----
