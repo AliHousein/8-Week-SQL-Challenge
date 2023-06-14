@@ -3,15 +3,16 @@
 ## Case Study 1 - Danny's Diner
 
 **Query #1**
-```
+
+```sql
     SELECT
-    		S.customer_id,
-    		SUM(ME.price) total_amount
-    	FROM dannys_diner.sales S
-    	JOIN dannys_diner.menu ME
-    		ON S.product_id = ME.product_id
-    	GROUP BY 1
-    	ORDER BY 2 DESC;
+        S.customer_id,
+        SUM(ME.price) total_amount
+    FROM dannys_diner.sales S
+    JOIN dannys_diner.menu ME
+        ON S.product_id = ME.product_id
+    GROUP BY 1
+    ORDER BY 2 DESC;
 ```
 
 | customer_id | total_amount |
@@ -22,9 +23,10 @@
 
 ---
 **Query #2**
-```
+
+```sql
     SELECT
-      	product_id,
+        product_id,
         product_name,
         price
     FROM dannys_diner.menu
