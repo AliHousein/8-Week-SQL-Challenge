@@ -248,7 +248,7 @@
             CASE
                 WHEN product_name = 'sushi' THEN price * 20
                 ELSE price * 10
-             END AS points
+            END AS points
          FROM dannys_diner.menu)
 
     SELECT
@@ -282,7 +282,7 @@
                 WHEN M.product_name = 'sushi' THEN price * 20 
                 WHEN S.order_date >= MM.join_date
                 AND S.order_date <= MM.join_date + INTERVAL '7 days' THEN price * 20
-              ELSE price * 10
+                ELSE price * 10
              END AS points
         FROM dannys_diner.menu M
         JOIN dannys_diner.sales S
@@ -364,9 +364,8 @@
             ELSE 'N'
         END AS member,
         CASE
-            WHEN S.order_date >= MM.join_date THEN
-                DENSE_RANK() OVER (PARTITION BY S.customer_id ORDER BY 
-                                   CASE WHEN S.order_date >= MM.join_date THEN S.order_date END) 
+            WHEN S.order_date >= MM.join_date THEN DENSE_RANK() OVER 
+            (PARTITION BY S.customer_id ORDER BY CASE WHEN S.order_date >= MM.join_date THEN S.order_date END) 
         END AS ranking
     FROM dannys_diner.sales S
     JOIN dannys_diner.menu M
