@@ -447,3 +447,10 @@ CREATE TEMP TABLE runner_orders_cleaned AS
 - To discover the tables and their columns, we can take a look at the ER Diagram of the clean dataset:
 
 <img src="https://github.com/AliHousein/8-Week-SQL-Challenge/blob/f8626733dfd25bbc95bf6b2e07d2f609e86cc0d8/Cases_Study_2_Pizza%20Runner/ER%20Diagram_Clean.png" width="800" height="600">
+
+---
+
+### B. Case Study Questions:
+
+#### A. Pizza Metrics:
+
