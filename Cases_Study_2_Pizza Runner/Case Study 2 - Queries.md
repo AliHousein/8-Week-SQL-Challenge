@@ -231,7 +231,7 @@ CREATE TEMP TABLE runner_orders_cleaned AS
 
 - Now we will start cleaning each column one by one:
 
-1. pickup_time column:
+**1. pickup_time column:**
 - Handling missing values:
 ```sql
 	UPDATE runner_orders_cleaned
@@ -246,7 +246,7 @@ CREATE TEMP TABLE runner_orders_cleaned AS
 	USING pickup_time::TIMESTAMP WITHOUT TIME ZONE;
 ```
 
-2. distance column:
+**2. distance column:**
 - Handling missing values:
 ```sql
 	UPDATE runner_orders_cleaned
@@ -273,7 +273,7 @@ CREATE TEMP TABLE runner_orders_cleaned AS
 	RENAME COLUMN distance TO distance_km;
 ```
 
-3. duration column:
+**3. duration column:**
 - Handling missing values:
 ```sql
 	UPDATE runner_orders_cleaned
@@ -306,7 +306,7 @@ CREATE TEMP TABLE runner_orders_cleaned AS
 	RENAME COLUMN duration TO duration_minutes;
 ```
 
-4. cancellation column:
+**4. cancellation column:**
 - Handling missing values:
 ```sql
 	UPDATE runner_orders_cleaned
