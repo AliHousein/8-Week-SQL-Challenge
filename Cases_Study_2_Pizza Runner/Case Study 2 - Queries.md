@@ -361,3 +361,10 @@ CREATE TEMP TABLE runner_orders_cleaned AS
 ```
 
 ---
+
+#### 5- Table 5: pizza_recipes:
+
+```sql
+	SELECT *
+	FROM pizza_runner.pizza_recipes;
+```
