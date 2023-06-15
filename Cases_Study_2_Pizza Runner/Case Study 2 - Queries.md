@@ -101,7 +101,7 @@
   
  - In order to optimize the customer_orders_cleaned_1, we need to handle the exclusions and extras columns because they have multiple values in the same cell in some rows
  - So we will create from it three new tables:
- 	1. customer_orders_cleaned: contains the all coulmns except the exclusions and extras columns, it will be the main table of customer orders.
-	2. exclusions_cleaned: contains two columns the row_id and exclusion_id, connected with customer_orders_cleaned through row_id column and also it will be connected with pizza_toppings_cleaned later.
-	3. extras_celaned: contains two columns the row_id and extras_id, connected with customer_orders_cleaned through row_id column and also it will be connected with pizza_toppings_cleaned later.
+ 1- customer_orders_cleaned: contains the all coulmns except the exclusions and extras columns, it will be the main table of customer orders.
+ 2- exclusions_cleaned: contains two columns the row_id and exclusion_id, connected with customer_orders_cleaned through row_id column and also it will be connected with pizza_toppings_cleaned later.
+ 3- extras_celaned: contains two columns the row_id and extras_id, connected with customer_orders_cleaned through row_id column and also it will be connected with pizza_toppings_cleaned later.
  
