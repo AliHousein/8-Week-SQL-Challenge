@@ -105,3 +105,39 @@
  2. **exclusions_cleaned:** contains two columns the row_id and exclusion_id, connected with customer_orders_cleaned through row_id column and also it will be connected with pizza_toppings_cleaned later.
  3. **extras_celaned:** contains two columns the row_id and extras_id, connected with customer_orders_cleaned through row_id column and also it will be connected with pizza_toppings_cleaned later.
  
+
+1. **customer_orders_cleaned:**
+
+```sql
+   DROP TABLE IF EXISTS customer_orders_cleaned;
+   CREATE TEMP TABLE customer_orders_cleaned AS
+	   (SELECT
+		row_id,
+		order_id,
+		customer_id,
+		pizza_id,
+		order_time
+	    FROM customer_orders_cleaned_1);
+```
+```sql
+   SELECT *
+   FROM customer_orders_cleaned
+   ORDER BY 1;
+```
+
+| row_id | order_id | customer_id | pizza_id | order_time               |
+| ------ | -------- | ----------- | -------- | ------------------------ |
+| 1      | 1        | 101         | 1        | 2020-01-01T18:05:02.000Z |
+| 2      | 2        | 101         | 1        | 2020-01-01T19:00:52.000Z |
+| 3      | 3        | 102         | 1        | 2020-01-02T23:51:23.000Z |
+| 4      | 3        | 102         | 2        | 2020-01-02T23:51:23.000Z |
+| 5      | 4        | 103         | 1        | 2020-01-04T13:23:46.000Z |
+| 6      | 4        | 103         | 1        | 2020-01-04T13:23:46.000Z |
+| 7      | 4        | 103         | 2        | 2020-01-04T13:23:46.000Z |
+| 8      | 5        | 104         | 1        | 2020-01-08T21:00:29.000Z |
+| 9      | 6        | 101         | 2        | 2020-01-08T21:03:13.000Z |
+| 10     | 7        | 105         | 2        | 2020-01-08T21:20:29.000Z |
+| 11     | 8        | 102         | 1        | 2020-01-09T23:54:33.000Z |
+| 12     | 9        | 103         | 1        | 2020-01-10T11:22:59.000Z |
+| 13     | 10       | 104         | 1        | 2020-01-11T18:34:49.000Z |
+| 14     | 10       | 104         | 1        | 2020-01-11T18:34:49.000Z |
