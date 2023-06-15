@@ -409,3 +409,36 @@ CREATE TEMP TABLE runner_orders_cleaned AS
 | 2        | 12         |
 
 ---
+
+#### 6- Table 6: pizza_toppings:
+
+```sql
+	SELECT *
+	FROM pizza_runner.pizza_toppings;
+```
+
+| topping_id | topping_name |
+| ---------- | ------------ |
+| 1          | Bacon        |
+| 2          | BBQ Sauce    |
+| 3          | Beef         |
+| 4          | Cheese       |
+| 5          | Chicken      |
+| 6          | Mushrooms    |
+| 7          | Onions       |
+| 8          | Pepperoni    |
+| 9          | Peppers      |
+| 10         | Salami       |
+| 11         | Tomatoes     |
+| 12         | Tomato Sauce |
+
+  - According to the results, the pizza_toppings table dosen't need any cleaning. But we will create a temporary table from it to keep the origin database.
+
+```sql
+	DROP TABLE IF EXISTS pizza_toppings_cleaned;
+	CREATE TEMP TABLE pizza_toppings_cleaned AS
+		(SELECT *
+		FROM pizza_runner.pizza_toppings);
+```
+
+---
