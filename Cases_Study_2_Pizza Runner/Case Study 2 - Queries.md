@@ -78,14 +78,25 @@
     
     ```sql
       	UPDATE customer_orders_cleaned_1
-				SET exclusions = NULL
-				WHERE exclusions LIKE ' ' OR exclusions LIKE '';
+	SET exclusions = NULL
+	WHERE exclusions LIKE ' ' OR exclusions LIKE '';
 
-				UPDATE customer_orders_cleaned_1
-				SET exclusions = NULL
-				WHERE exclusions LIKE 'null';
+	UPDATE customer_orders_cleaned_1
+	SET exclusions = NULL
+	WHERE exclusions LIKE 'null';
     ```
   
+  2- extras column:
+  
+  ```sql
+	UPDATE customer_orders_cleaned_1
+	SET extras = NULL
+	WHERE extras LIKE ' ' OR extras LIKE '';
+
+	UPDATE customer_orders_cleaned_1
+	SET extras = NULL
+	WHERE extras LIKE 'null';
+```
   
   
   
