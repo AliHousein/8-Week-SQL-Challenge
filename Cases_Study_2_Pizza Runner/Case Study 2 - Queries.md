@@ -238,3 +238,103 @@ CREATE TEMP TABLE runner_orders_cleaned AS
 	SET pickup_time = NULL
 	WHERE pickup_time LIKE 'null';
 ```
+
+- Changing datatype (from VARCHAR to TIMESTAMP):
+```sql
+	ALTER TABLE runner_orders_cleaned
+	ALTER COLUMN pickup_time TYPE TIMESTAMP WITHOUT TIME ZONE 
+	USING pickup_time::TIMESTAMP WITHOUT TIME ZONE;
+```
+
+2. distance column:
+- Handling missing values:
+```sql
+	UPDATE runner_orders_cleaned
+	SET distance = NULL
+	WHERE distance LIKE 'null';
+```
+
+- Removing unwanted text to reach consistency:
+```sql
+	UPDATE runner_orders_cleaned
+	SET distance = REPLACE(distance, 'km', '');
+```
+
+- Changing the datatype of the columns (from VARCHAR to double precision):
+```sql
+	ALTER TABLE runner_orders_cleaned
+	ALTER COLUMN distance TYPE double precision
+	USING distance::double precision;
+```
+
+- Renaming the column to be more clear about its values:
+```sql
+	ALTER TABLE runner_orders_cleaned 
+	RENAME COLUMN distance TO distance_km;
+```
+
+3. duration column:
+- Handling missing values:
+```sql
+	UPDATE runner_orders_cleaned
+	SET duration = NULL
+	WHERE duration LIKE 'null';
+```
+
+- Removing unwanted text to reach consistency:
+```sql
+	UPDATE runner_orders_cleaned
+	SET duration = REPLACE(duration, 'minutes', '');
+
+	UPDATE runner_orders_cleaned
+	SET duration = REPLACE(duration, 'mins', '');
+
+	UPDATE runner_orders_cleaned
+	SET duration = REPLACE(duration, 'minute', '');
+```
+
+- Changing the datatype of the columns (from VARCHAR to double precision):
+```sql
+	ALTER TABLE runner_orders_cleaned
+	ALTER COLUMN duration TYPE double precision
+	USING duration::double precision;
+```
+
+- Renaming the column to be more clear about its values:
+```sql
+	ALTER TABLE runner_orders_cleaned 
+	RENAME COLUMN duration TO duration_minutes;
+```
+
+4. cancellation column:
+- Handling missing values:
+```sql
+	UPDATE runner_orders_cleaned
+	SET cancellation = NULL
+	WHERE cancellation = ' ' OR cancellation = '' OR cancellation = 'null';
+
+	UPDATE runner_orders_cleaned
+	SET cancellation = 'Not Canceled'
+	WHERE cancellation IS NULL;
+```
+
+- We have finished all required cleaning steps on the runner_orders table and got the cleaned version of it runner_orders_cleaned
+
+```sql
+	SELECT *
+	FROM runner_orders_cleaned;
+```
+| order_id | runner_id | pickup_time              | distance_km | duration_minutes | cancellation            |
+| -------- | --------- | ------------------------ | ----------- | ---------------- | ----------------------- |
+| 6        | 3         |                          |             |                  | Restaurant Cancellation |
+| 9        | 2         |                          |             |                  | Customer Cancellation   |
+| 3        | 1         | 2020-01-03T00:12:37.000Z | 13.4        | 20               | Not Canceled            |
+| 4        | 2         | 2020-01-04T13:53:03.000Z | 23.4        | 40               | Not Canceled            |
+| 5        | 3         | 2020-01-08T21:10:57.000Z | 10          | 15               | Not Canceled            |
+| 1        | 1         | 2020-01-01T18:15:34.000Z | 20          | 32               | Not Canceled            |
+| 2        | 1         | 2020-01-01T19:10:54.000Z | 20          | 27               | Not Canceled            |
+| 7        | 2         | 2020-01-08T21:30:45.000Z | 25          | 25               | Not Canceled            |
+| 8        | 2         | 2020-01-10T00:15:02.000Z | 23.4        | 15               | Not Canceled            |
+| 10       | 1         | 2020-01-11T18:50:20.000Z | 10          | 10               | Not Canceled            |
+
+---
