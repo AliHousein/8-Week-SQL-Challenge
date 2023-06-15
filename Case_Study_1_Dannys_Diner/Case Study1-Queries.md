@@ -3,9 +3,9 @@
 ## Case Study 1 - Danny's Diner
 
 <img src="https://8weeksqlchallenge.com/images/case-study-designs/1.png"  width="600" height="550">
----
+
 **- Access the challenge and full details about it via this link** [Case Study #1 - Danny's Diner](https://8weeksqlchallenge.com/case-study-1/).
----
+
 ### Challenge Questions and Solutions:
 
 1- What is the total amount each customer spent at the restaurant?
