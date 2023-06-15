@@ -445,3 +445,5 @@ CREATE TEMP TABLE runner_orders_cleaned AS
 
 - At this stage we have finished all the required cleaning procedures and we can start solving the challenge questions, but we need to see the new modle of our dataset.
 - To discover the tables and their columns, we can take a look at the ER Diagram of the clean dataset:
+
+<img src="https://github.com/AliHousein/8-Week-SQL-Challenge/blob/f8626733dfd25bbc95bf6b2e07d2f609e86cc0d8/Cases_Study_2_Pizza%20Runner/ER%20Diagram_Clean.png" width="600" height="550">
