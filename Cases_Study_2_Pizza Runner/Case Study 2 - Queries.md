@@ -221,5 +221,5 @@
 
 - As we can see, there are four columns need to be cleaned:
 1. pickup_time:
-	a. Handle missing values:
+a. Handle missing values:
 		
