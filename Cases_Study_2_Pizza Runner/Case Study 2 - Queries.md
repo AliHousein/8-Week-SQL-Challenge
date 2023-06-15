@@ -77,27 +77,27 @@
 
 	  1. exclusions column:
 
-	    ```sql
-		UPDATE customer_orders_cleaned_1
-		SET exclusions = NULL
-		WHERE exclusions LIKE ' ' OR exclusions LIKE '';
+    ```sql
+	UPDATE customer_orders_cleaned_1
+	SET exclusions = NULL
+	WHERE exclusions LIKE ' ' OR exclusions LIKE '';
 
-		UPDATE customer_orders_cleaned_1
-		SET exclusions = NULL
-		WHERE exclusions LIKE 'null';
-	    ```
+	UPDATE customer_orders_cleaned_1
+	SET exclusions = NULL
+	WHERE exclusions LIKE 'null';
+    ```
   
 	  2. extras column:
 
-	  ```sql
-		UPDATE customer_orders_cleaned_1
-		SET extras = NULL
-		WHERE extras LIKE ' ' OR extras LIKE '';
+  ```sql
+	UPDATE customer_orders_cleaned_1
+	SET extras = NULL
+	WHERE extras LIKE ' ' OR extras LIKE '';
 
-		UPDATE customer_orders_cleaned_1
-		SET extras = NULL
-		WHERE extras LIKE 'null';
-	  ```
+	UPDATE customer_orders_cleaned_1
+	SET extras = NULL
+	WHERE extras LIKE 'null';
+  ```
   
  - In order to optimize the customer_orders_cleaned_1, we need to handle the exclusions and extras columns because they have multiple values in the same cell in some rows
  - So we will create from it three new tables:
