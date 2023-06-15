@@ -2,7 +2,8 @@
 
 ## Case Study 1 - Danny's Diner
 
-![case_study_1](https://8weeksqlchallenge.com/images/case-study-designs/1.png "case_study_1")
+<img src="https://8weeksqlchallenge.com/images/case-study-designs/1.png"  width="600" height="300">
+
 
 ### Challenge Questions and Solutions:
 
