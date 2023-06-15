@@ -75,7 +75,7 @@
 - We named it customer_orders_cleaned_1 because it will be the first step of cleaning this table and we add row_id column to make the rows unique and we will use later in the cleaning stage.
 - Now we will handle the missing values of the two columns:
 
-	  1. exclusions column:
+1. exclusions column:
 
     ```sql
 	UPDATE customer_orders_cleaned_1
@@ -87,7 +87,7 @@
 	WHERE exclusions LIKE 'null';
     ```
   
-	  2. extras column:
+2. extras column:
 
   ```sql
 	UPDATE customer_orders_cleaned_1
