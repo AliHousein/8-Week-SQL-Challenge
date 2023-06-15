@@ -24,7 +24,12 @@
 | 3         | 2021-01-08T00:00:00.000Z |
 | 4         | 2021-01-15T00:00:00.000Z |
 
----
 
   - According to the results, it dosen't need any cleaning. But we will create a temporary table from it to keep the origin database.
 
+ ```sql
+  DROP TABLE IF EXISTS runners_cleaned;
+  CREATE TEMP TABLE runners_cleaned AS
+    (SELECT *
+     FROM pizza_runner.runners);
+```
