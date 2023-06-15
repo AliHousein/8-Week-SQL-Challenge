@@ -198,3 +198,6 @@
 - Finally we have finished the cutsomer_orders cleaning and we got three tables which we will use in the challenge (customer_orders_cleaned, exclusions_cleaned and extras_cleaned).
 
 ---
+
+***3- Table 3: runner_orders:***
+
