@@ -78,7 +78,7 @@
   1- exclusions column:
     
     ```sql
-      UPDATE customer_orders_cleaned_1
+	UPDATE customer_orders_cleaned_1
 	SET exclusions = NULL
 	WHERE exclusions LIKE ' ' OR exclusions LIKE '';
 
