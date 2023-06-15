@@ -368,3 +368,44 @@ CREATE TEMP TABLE runner_orders_cleaned AS
 	SELECT *
 	FROM pizza_runner.pizza_recipes;
 ```
+
+| pizza_id | toppings                |
+| -------- | ----------------------- |
+| 1        | 1, 2, 3, 4, 5, 6, 8, 10 |
+| 2        | 4, 6, 7, 9, 11, 12      |
+
+- As we can see, toppings column need to be clean because it have multiple values in the same row, so we should expand the values in the rows.
+- We will create new temporary table pizza_recipes_cleaned to handle the multiple values in the toppings column.
+
+```sql
+	DROP TABLE IF EXISTS pizza_recipes_cleaned;
+	CREATE TEMP TABLE pizza_recipes_cleaned AS
+		(SELECT 
+			pizza_id,
+			UNNEST(string_to_array(toppings, ',')) :: INT topping_id
+		FROM pizza_runner.pizza_recipes);
+```
+
+```sql
+	SELECT *
+	FROM pizza_recipes_cleaned;
+```
+
+| pizza_id | topping_id |
+| -------- | ---------- |
+| 1        | 1          |
+| 1        | 2          |
+| 1        | 3          |
+| 1        | 4          |
+| 1        | 5          |
+| 1        | 6          |
+| 1        | 8          |
+| 1        | 10         |
+| 2        | 4          |
+| 2        | 6          |
+| 2        | 7          |
+| 2        | 9          |
+| 2        | 11         |
+| 2        | 12         |
+
+---
