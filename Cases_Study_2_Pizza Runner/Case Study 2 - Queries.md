@@ -476,3 +476,21 @@ FROM customer_orders_cleaned;
 | num_unique_orders  |
 | ------------------ |
 | 10                 |
+
+
+3. How many successful orders were delivered by each runner?
+
+```sql
+SELECT 
+	runner_id,
+	COUNT(cancellation) num_delivered_orders
+FROM runner_orders_cleaned
+WHERE cancellation LIKE 'Not Canceled'
+GROUP BY 1;
+```
+
+| runner_id  | num_delivered_orders |
+| ---------- | -------------------- |
+| 1          | 4        	    |
+| 2          | 3    		    |
+| 3          | 1         	    |
