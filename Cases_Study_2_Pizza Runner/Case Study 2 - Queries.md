@@ -454,3 +454,4 @@ CREATE TEMP TABLE runner_orders_cleaned AS
 
 #### A. Pizza Metrics:
 
+1.How many pizzas were ordered?
