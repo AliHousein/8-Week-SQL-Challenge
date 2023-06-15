@@ -452,15 +452,27 @@ CREATE TEMP TABLE runner_orders_cleaned AS
 
 ### B. Case Study Questions:
 
-#### A. Pizza Metrics:
+#### a. Pizza Metrics:
 
 1. How many pizzas were ordered?
 
 ```sql
-	SELECT COUNT(pizza_id) num_ordered_pizzas
-	FROM customer_orders_cleaned;
+SELECT COUNT(pizza_id) num_ordered_pizzas
+FROM customer_orders_cleaned;
 ```
 
 | num_ordered_pizzas |
 | ------------------ |
 | 14                 |
+
+
+2. How many unique customer orders were made?
+
+```sql
+SELECT COUNT(DISTINCT order_id) num_unique_orders
+FROM customer_orders_cleaned;
+```
+
+| num_unique_orders  |
+| ------------------ |
+| 10                 |
