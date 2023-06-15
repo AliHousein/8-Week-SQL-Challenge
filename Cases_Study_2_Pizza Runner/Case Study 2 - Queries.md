@@ -494,3 +494,26 @@ GROUP BY 1;
 | 1          | 4        	    |
 | 2          | 3    		    |
 | 3          | 1         	    |
+
+
+4. How many of each type of pizza was delivered?
+
+```sql
+SELECT
+	P.pizza_name,
+	COUNT(C.pizza_id) num_delivered_pizza
+FROM pizza_names_cleaned P
+JOIN customer_orders_cleaned C
+	ON P.pizza_id = C.pizza_id
+JOIN runner_orders_cleaned R
+	ON C.order_id = R.order_id
+	AND R.cancellation LIKE 'Not Canceled'
+GROUP BY 1;
+```
+
+| pizza_name  | num_delivered_pizza |
+| ----------  | ------------------- |
+| Meatlovers  | 9        	    |
+| Vegetarian  | 3    		    |
+
+
