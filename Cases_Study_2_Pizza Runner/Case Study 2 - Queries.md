@@ -219,7 +219,22 @@
 | 9        | 2         | null                | null     | null       | Customer Cancellation   |
 | 10       | 1         | 2020-01-11 18:50:20 | 10km     | 10minutes  | null                    |
 
-- As we can see, there are four columns need to be cleaned:
-1. pickup_time:
-a. Handle missing values:
-		
+- As we can see, there are four columns need to be cleaned (pickup_time, distance, duration and cancellation), need to changing datatypes, handling missing values and removing unwanted text.
+- First step, we will create temporary table from it as usual, name it runner_orders_cleaned.
+
+```sql
+DROP TABLE IF EXISTS runner_orders_cleaned;
+CREATE TEMP TABLE runner_orders_cleaned AS
+	(SELECT *
+	FROM pizza_runner.runner_orders);
+```
+
+- Now we will start cleaning each column one by one:
+
+1. pickup_time column:
+- Handling missing values:
+```sql
+	UPDATE runner_orders_cleaned
+	SET pickup_time = NULL
+	WHERE pickup_time LIKE 'null';
+```
