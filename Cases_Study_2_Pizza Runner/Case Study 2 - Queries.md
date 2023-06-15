@@ -340,3 +340,24 @@ CREATE TEMP TABLE runner_orders_cleaned AS
 ---
 
 #### 4- Table 4: pizza_names:
+
+```sql
+	SELECT *
+	FROM pizza_runner.pizza_names;
+```
+
+| pizza_id | pizza_name |
+| -------- | ---------- |
+| 1        | Meatlovers |
+| 2        | Vegetarian |
+
+  - According to the results, the pizza_names table dosen't need any cleaning. But we will create a temporary table from it to keep the origin database.
+ 
+ ```sql
+	DROP TABLE IF EXISTS pizza_names_cleaned;
+	CREATE TEMP TABLE pizza_names_cleaned AS
+		(SELECT *
+		FROM pizza_runner.pizza_names);
+```
+
+---
