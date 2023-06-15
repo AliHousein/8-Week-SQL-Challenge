@@ -8,7 +8,7 @@
 
 ---
 
-### Cleaning Stage of the Dataset:
+### A. Cleaning Stage of the Dataset:
 
   1- Table 1: runners:
   
@@ -194,3 +194,7 @@
 | 14     | 1         |
 | 14     | 4         |
 
+
+- Finally we have finished the cutsomer_orders cleaning and we got three tables which we will use in the challenge (customer_orders_cleaned, exclusions_cleaned and extras_cleaned).
+
+---
