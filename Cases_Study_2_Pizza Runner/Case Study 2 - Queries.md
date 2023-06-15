@@ -220,6 +220,6 @@
 | 10       | 1         | 2020-01-11 18:50:20 | 10km     | 10minutes  | null                    |
 
 - As we can see, there are four columns need to be cleaned:
-1- pickup_time:
+1. pickup_time:
 	a. Handle missing values:
 		
