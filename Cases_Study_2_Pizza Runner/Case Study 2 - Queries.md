@@ -66,8 +66,26 @@
  ```sql
   DROP TABLE IF EXISTS customer_orders_cleaned_1;
   CREATE TEMP TABLE customer_orders_cleaned_1 AS
-    (SELECT *
+    (SELECT 
+       ROW_NUMBER() OVER(ORDER BY order_id):: INT row_id,
+       *
      FROM pizza_runner.customer_orders);
 ```
 
-- We named it customer_orders_cleaned_1 because it will be the first step of cleaning this table.
+- We named it customer_orders_cleaned_1 because it will be the first step of cleaning this table and we add row_id column to make the rows unique and we will use later in the cleaning stage.
+- Now we will handle the missing values of the two columns:
+  1- exclusions column:
+    
+    ```sql
+      	UPDATE customer_orders_cleaned_1
+				SET exclusions = NULL
+				WHERE exclusions LIKE ' ' OR exclusions LIKE '';
+
+				UPDATE customer_orders_cleaned_1
+				SET exclusions = NULL
+				WHERE exclusions LIKE 'null';
+    ```
+  
+  
+  
+  
