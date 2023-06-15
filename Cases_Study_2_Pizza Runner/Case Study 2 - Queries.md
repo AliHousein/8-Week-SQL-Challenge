@@ -103,10 +103,10 @@
  - So we will create from it three new tables:
  1. **customer_orders_cleaned:** contains the all coulmns except the exclusions and extras columns, it will be the main table of customer orders.
  2. **exclusions_cleaned:** contains two columns the row_id and exclusion_id, connected with customer_orders_cleaned through row_id column and also it will be connected with pizza_toppings_cleaned later.
- 3. **extras_celaned:** contains two columns the row_id and extras_id, connected with customer_orders_cleaned through row_id column and also it will be connected with pizza_toppings_cleaned later.
+ 3. **extras_cleaned:** contains two columns the row_id and extras_id, connected with customer_orders_cleaned through row_id column and also it will be connected with pizza_toppings_cleaned later.
  
 
-1. **customer_orders_cleaned:**
+**customer_orders_cleaned:**
 
 ```sql
    DROP TABLE IF EXISTS customer_orders_cleaned;
@@ -141,3 +141,56 @@
 | 12     | 9        | 103         | 1        | 2020-01-10T11:22:59.000Z |
 | 13     | 10       | 104         | 1        | 2020-01-11T18:34:49.000Z |
 | 14     | 10       | 104         | 1        | 2020-01-11T18:34:49.000Z |
+
+
+**exclusions_cleaned:**
+
+```sql
+	DROP TABLE IF EXISTS exclusions_cleaned;
+	CREATE TEMP TABLE exclusions_cleaned AS
+		(SELECT 
+			row_id,
+			UNNEST(string_to_array(exclusions, ','))::INTEGER exclusions_id
+		FROM customer_orders_cleaned_1);
+```
+```sql
+	SELECT *
+	FROM exclusions_cleaned
+	ORDER BY 1;
+```
+
+| row_id | exclusions_id |
+| ------ | ------------- |
+| 5      | 4             |
+| 6      | 4             |
+| 7      | 4             |
+| 12     | 4             |
+| 14     | 2             |
+| 14     | 6             |
+
+
+**extras_cleaned:**
+
+```sql
+	DROP TABLE IF EXISTS extras_cleaned;
+	CREATE TEMP TABLE extras_cleaned AS
+		(SELECT 
+			row_id,
+			UNNEST(string_to_array(extras, ','))::INTEGER extras_id
+		FROM customer_orders_cleaned_1);
+```
+```sql
+	SELECT *
+	FROM extras_cleaned
+	ORDER BY 1;
+```
+
+| row_id | extras_id |
+| ------ | --------- |
+| 8      | 1         |
+| 10     | 1         |
+| 12     | 1         |
+| 12     | 5         |
+| 14     | 1         |
+| 14     | 4         |
+
