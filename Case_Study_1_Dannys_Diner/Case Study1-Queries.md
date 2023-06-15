@@ -5,6 +5,18 @@
 <img src="https://8weeksqlchallenge.com/images/case-study-designs/1.png"  width="600" height="550">
 
 
+
+### Casestudy Information:
+
+    #### Entity Relationship Diagram:
+    
+    <div class="diagram-container flex-1"><div class="diagram" style="background-color: rgb(251, 251, 251); cursor: default;"><div class="konvajs-content" role="presentation" style="position: relative; user-select: none; width: 552px; height: 670px;"><canvas width="690" height="837" style="padding: 0px; margin: 0px; border: 0px; background: transparent; position: absolute; top: 0px; left: 0px; width: 552px; height: 670px; display: block;"></canvas><canvas width="690" height="837" style="padding: 0px; margin: 0px; border: 0px; background: transparent; position: absolute; top: 0px; left: 0px; width: 552px; height: 670px; display: block;"></canvas><canvas width="690" height="837" style="padding: 0px; margin: 0px; border: 0px; background: transparent; position: absolute; top: 0px; left: 0px; width: 552px; height: 670px; display: block;"></canvas><canvas width="690" height="837" style="padding: 0px; margin: 0px; border: 0px; background: transparent; position: absolute; top: 0px; left: 0px; width: 552px; height: 670px; display: block;"></canvas><canvas width="690" height="837" style="padding: 0px; margin: 0px; border: 0px; background: transparent; position: absolute; top: 0px; left: 0px; width: 552px; height: 670px; display: block;"></canvas></div></div> <div data-v-a07b6804="" class="controller-container" style="--display-controller: flex;"><div data-v-a07b6804="" class="controller light"><label data-v-a07b6804="" class="scale-value">100%</label> <div data-v-a07b6804="" class="vue-slider vue-slider-ltr" default="default" style="padding: 7px 0px; width: 50px; height: 8px;"><div class="vue-slider-rail"><div class="vue-slider-process" style="height: 100%; top: 0px; left: 0%; width: 62.963%; transition-property: width, left; transition-duration: 0.5s;"></div><div aria-valuetext="1" class="vue-slider-dot" role="slider" aria-valuenow="1" aria-valuemin="0.15" aria-valuemax="1.5" aria-orientation="horizontal" tabindex="0" style="width: 14px; height: 14px; transform: translate(-50%, -50%); top: 50%; left: 62.963%; transition: left 0.5s ease 0s;"><div class="vue-slider-dot-handle" style="background: rgb(52, 152, 219); box-shadow: none; border: 1px solid white;"></div></div></div></div> <button data-v-a07b6804="">
+      Focus
+    </button> <button data-v-a07b6804="">
+      Auto-arrange
+    </button> <button data-v-a07b6804="">Highlight</button> <label data-v-25adc6c0="" data-v-a07b6804="" class="vue-js-switch"><input data-v-25adc6c0="" type="checkbox" class="v-switch-input"> <div data-v-25adc6c0="" class="v-switch-core" style="width: 28px; height: 16px; background-color: rgb(204, 204, 204); border-radius: 8px;"><div data-v-25adc6c0="" class="v-switch-button" style="width: 10px; height: 10px; transition: transform 300ms ease 0s; transform: translate3d(3px, 3px, 0px);"></div></div> <!----></label> <!----></div></div> <!----> <!----></div>
+    
+    
 ### Challenge Questions and Solutions:
 
 1- What is the total amount each customer spent at the restaurant?
