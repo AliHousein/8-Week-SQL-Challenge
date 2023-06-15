@@ -25,7 +25,7 @@
 | 4         | 2021-01-15T00:00:00.000Z |
 
 
-  - According to the results, it dosen't need any cleaning. But we will create a temporary table from it to keep the origin database.
+  - According to the results, the runners table dosen't need any cleaning. But we will create a temporary table from it to keep the origin database.
 
  ```sql
   DROP TABLE IF EXISTS runners_cleaned;
@@ -33,3 +33,41 @@
     (SELECT *
      FROM pizza_runner.runners);
 ```
+---
+
+  2- Table 2: customer_orders:
+  
+```sql
+   SELECT *
+   FROM pizza_runner.customer_orders;
+```
+
+| order_id | customer_id | pizza_id | exclusions | extras | order_time               |
+| -------- | ----------- | -------- | ---------- | ------ | ------------------------ |
+| 1        | 101         | 1        |            |        | 2020-01-01T18:05:02.000Z |
+| 2        | 101         | 1        |            |        | 2020-01-01T19:00:52.000Z |
+| 3        | 102         | 1        |            |        | 2020-01-02T23:51:23.000Z |
+| 3        | 102         | 2        |            |        | 2020-01-02T23:51:23.000Z |
+| 4        | 103         | 1        | 4          |        | 2020-01-04T13:23:46.000Z |
+| 4        | 103         | 1        | 4          |        | 2020-01-04T13:23:46.000Z |
+| 4        | 103         | 2        | 4          |        | 2020-01-04T13:23:46.000Z |
+| 5        | 104         | 1        | null       | 1      | 2020-01-08T21:00:29.000Z |
+| 6        | 101         | 2        | null       | null   | 2020-01-08T21:03:13.000Z |
+| 7        | 105         | 2        | null       | 1      | 2020-01-08T21:20:29.000Z |
+| 8        | 102         | 1        | null       | null   | 2020-01-09T23:54:33.000Z |
+| 9        | 103         | 1        | 4          | 1, 5   | 2020-01-10T11:22:59.000Z |
+| 10       | 104         | 1        | null       | null   | 2020-01-11T18:34:49.000Z |
+| 10       | 104         | 1        | 2, 6       | 1, 4   | 2020-01-11T18:34:49.000Z |
+
+
+  - The customer_orders table has two columns need to be cleaned exclusions and extras where we should handle missing values and datatypes.
+  - First step we will create a temporary table from it:
+
+ ```sql
+  DROP TABLE IF EXISTS customer_orders_cleaned_1;
+  CREATE TEMP TABLE customer_orders_cleaned_1 AS
+    (SELECT *
+     FROM pizza_runner.customer_orders);
+```
+
+- We named it customer_orders_cleaned_1 because it will be the first step of cleaning this table.
