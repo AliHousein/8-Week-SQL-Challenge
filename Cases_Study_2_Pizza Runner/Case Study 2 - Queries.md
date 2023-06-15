@@ -454,4 +454,13 @@ CREATE TEMP TABLE runner_orders_cleaned AS
 
 #### A. Pizza Metrics:
 
-1.How many pizzas were ordered?
+1. How many pizzas were ordered?
+
+```sql
+	SELECT COUNT(pizza_id) num_ordered_pizzas
+	FROM customer_orders_cleaned;
+```
+
+| num_ordered_pizzas |
+| ------------------ |
+| 14                 |
