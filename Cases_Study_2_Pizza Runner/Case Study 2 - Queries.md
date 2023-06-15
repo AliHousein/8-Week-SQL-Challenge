@@ -75,29 +75,33 @@
 - We named it customer_orders_cleaned_1 because it will be the first step of cleaning this table and we add row_id column to make the rows unique and we will use later in the cleaning stage.
 - Now we will handle the missing values of the two columns:
 
-  1- exclusions column:
-    
-    ```sql
-	UPDATE customer_orders_cleaned_1
-	SET exclusions = NULL
-	WHERE exclusions LIKE ' ' OR exclusions LIKE '';
+	  1- exclusions column:
 
-	UPDATE customer_orders_cleaned_1
-	SET exclusions = NULL
-	WHERE exclusions LIKE 'null';
-    ```
-  
-  2- extras column:
-  
-  ```sql
-	UPDATE customer_orders_cleaned_1
-	SET extras = NULL
-	WHERE extras LIKE ' ' OR extras LIKE '';
+	    ```sql
+		UPDATE customer_orders_cleaned_1
+		SET exclusions = NULL
+		WHERE exclusions LIKE ' ' OR exclusions LIKE '';
 
-	UPDATE customer_orders_cleaned_1
-	SET extras = NULL
-	WHERE extras LIKE 'null';
-  ```
+		UPDATE customer_orders_cleaned_1
+		SET exclusions = NULL
+		WHERE exclusions LIKE 'null';
+	    ```
   
+	  2- extras column:
+
+	  ```sql
+		UPDATE customer_orders_cleaned_1
+		SET extras = NULL
+		WHERE extras LIKE ' ' OR extras LIKE '';
+
+		UPDATE customer_orders_cleaned_1
+		SET extras = NULL
+		WHERE extras LIKE 'null';
+	  ```
   
+ - In order to optimize the customer_orders_cleaned_1, we need to handle the exclusions and extras columns because they have multiple values in the same cell in some rows
+ - So we will create from it three new tables:
+ 	1- customer_orders_cleaned: contains the all coulmns except the exclusions and extras columns, it will be the main table of customer orders.
+	2- exclusions_cleaned: contains two columns the row_id and exclusion_id, connected with customer_orders_cleaned through row_id column and also it will be connected with pizza_toppings_cleaned later.
+	3- extras_celaned: contains two columns the row_id and extras_id, connected with customer_orders_cleaned through row_id column and also it will be connected with pizza_toppings_cleaned later.
  
