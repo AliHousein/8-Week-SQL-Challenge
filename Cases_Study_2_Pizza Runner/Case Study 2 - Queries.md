@@ -10,7 +10,7 @@
 
 ### A. Cleaning Stage of the Dataset:
 
-  **1- Table 1: runners:**
+  #### 1- Table 1: runners:
   
   ```sql
     SELECT *
@@ -35,7 +35,7 @@
 ```
 ---
 
-  **2- Table 2: customer_orders:**
+ #### 2- Table 2: customer_orders:
   
 ```sql
    SELECT *
@@ -199,7 +199,7 @@
 
 ---
 
-**3- Table 3: runner_orders:**
+#### 3- Table 3: runner_orders:
 
 ```sql
 	SELECT *
@@ -338,3 +338,5 @@ CREATE TEMP TABLE runner_orders_cleaned AS
 | 10       | 1         | 2020-01-11T18:50:20.000Z | 10          | 10               | Not Canceled            |
 
 ---
+
+#### 4- Table 4: pizza_names:
