@@ -1005,20 +1005,20 @@ FROM customer_orders_cleaned;
 
 ```
 
-| row_id | order_id | customer_id | pizza_id | order_time               | adding_order_description 					  |
-| ------ | -------- | ----------- | -------- | ------------------------ | --------------------------------------------------------------- |
-| 1      | 1        | 101         | 1        | 2020-01-01T18:05:02.000Z | Meatlovers							  |
-| 2      | 2        | 101         | 1        | 2020-01-01T19:00:52.000Z | Meatlovers							  |
-| 3      | 3        | 102         | 1        | 2020-01-02T23:51:23.000Z | Meatlovers							  |
-| 4      | 3        | 102         | 2        | 2020-01-02T23:51:23.000Z | Vegetarian							  |
-| 5      | 4        | 103         | 1        | 2020-01-04T13:23:46.000Z | Meatlovers - Exclude Cheese					  |
-| 6      | 4        | 103         | 1        | 2020-01-04T13:23:46.000Z | Meatlovers - Exclude Cheese					  |
-| 7      | 4        | 103         | 2        | 2020-01-04T13:23:46.000Z | Vegetarian - Exclude Cheese					  |
-| 8      | 5        | 104         | 1        | 2020-01-08T21:00:29.000Z | Meatlovers - Extra Bacon					  |
-| 9      | 6        | 101         | 2        | 2020-01-08T21:03:13.000Z | Vegetarian							  |
-| 10     | 7        | 105         | 2        | 2020-01-08T21:20:29.000Z | Vegetarian - Extra Bacon					  |
-| 11     | 8        | 102         | 1        | 2020-01-09T23:54:33.000Z | Meatlovers							  |
-| 12     | 9        | 103         | 1        | 2020-01-10T11:22:59.000Z | Meatlovers - Exclude Cheese - Extra Bacon, Chicken		  |
-| 13     | 10       | 104         | 1        | 2020-01-11T18:34:49.000Z | Meatlovers - Exclude BBQ Sauce, Mushrooms - Extra Bacon, Cheese |
-| 14     | 10       | 104         | 1        | 2020-01-11T18:34:49.000Z | Meatlovers							  |
+| row_id | order_id | customer_id | pizza_id | order_time               	| adding_order_description 					  |
+| ------ | -------- | ----------- | -------- | --------------------------------	| --------------------------------------------------------------- |
+| 1      | 1        | 101         | 1        | 2020-01-01T18:05:02.000Z 	| Meatlovers							  |
+| 2      | 2        | 101         | 1        | 2020-01-01T19:00:52.000Z 	| Meatlovers							  |
+| 3      | 3        | 102         | 1        | 2020-01-02T23:51:23.000Z 	| Meatlovers							  |
+| 4      | 3        | 102         | 2        | 2020-01-02T23:51:23.000Z 	| Vegetarian							  |
+| 5      | 4        | 103         | 1        | 2020-01-04T13:23:46.000Z 	| Meatlovers - Exclude Cheese					  |
+| 6      | 4        | 103         | 1        | 2020-01-04T13:23:46.000Z 	| Meatlovers - Exclude Cheese					  |
+| 7      | 4        | 103         | 2        | 2020-01-04T13:23:46.000Z 	| Vegetarian - Exclude Cheese					  |
+| 8      | 5        | 104         | 1        | 2020-01-08T21:00:29.000Z 	| Meatlovers - Extra Bacon					  |
+| 9      | 6        | 101         | 2        | 2020-01-08T21:03:13.000Z 	| Vegetarian							  |
+| 10     | 7        | 105         | 2        | 2020-01-08T21:20:29.000Z 	| Vegetarian - Extra Bacon					  |
+| 11     | 8        | 102         | 1        | 2020-01-09T23:54:33.000Z 	| Meatlovers							  |
+| 12     | 9        | 103         | 1        | 2020-01-10T11:22:59.000Z 	| Meatlovers - Exclude Cheese - Extra Bacon, Chicken		  |
+| 13     | 10       | 104         | 1        | 2020-01-11T18:34:49.000Z 	| Meatlovers - Exclude BBQ Sauce, Mushrooms - Extra Bacon, Cheese |
+| 14     | 10       | 104         | 1        | 2020-01-11T18:34:49.000Z 	| Meatlovers							  |
 
