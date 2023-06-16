@@ -667,3 +667,93 @@ GROUP BY 1;
 ---
 
 #### b. Runner and Customer Experience:
+
+1. How many runners signed up for each 1 week period? (i.e. week starts 2021-01-01)
+
+```sql
+SELECT
+	(registration_date - DATE_TRUNC('year', registration_date)::DATE) / 7 + 1 registration_week,
+	COUNT(runner_id) num_runners
+FROM runners_cleaned
+GROUP BY 1
+ORDER BY 1;
+```
+
+| registration_week        | num_runners       |
+| ------------------------ | ----------------- |
+| 1 			   | 2                 |
+| 2 			   | 1                 |
+| 3 			   | 1                 |
+
+
+2. What was the average time in minutes it took for each runner to arrive at the Pizza Runner HQ to pickup the order?
+
+```sql
+SELECT
+	runner_id,
+	AVG(sub_minute) avg_time_minutes
+FROM
+	(SELECT DISTINCT
+		R.runner_id,
+		R.order_id,
+		((DATE_PART('HOUR', R.pickup_time - C.order_time) * 60 ) + 
+		(DATE_PART('MINUTE', R.pickup_time - C.order_time)) + 
+		(DATE_PART('SECOND', R.pickup_time - C.order_time) / 60 ) ) sub_minute
+	 FROM customer_orders_cleaned C
+	 JOIN runner_orders_cleaned R
+		ON C.order_id = R.order_id) sub_1
+GROUP BY 1
+ORDER BY 1;
+```
+
+| runner_id | avg_time_minutes    |
+| --------- | ------------------- |
+| 1 	    | 14.329166666666666  |
+| 2 	    | 20.01111111111111   |
+| 3 	    | 10.466666666666667  |
+
+
+3. Is there any relationship between the number of pizzas and how long the order takes to prepare?
+
+```sql
+WITH num_pizzas_in_order AS
+	(SELECT
+		C.order_id,
+		COUNT(C.pizza_id) num_pizzas
+	FROM customer_orders_cleaned C
+	GROUP BY 1
+	ORDER BY 1) ,
+	
+order_preparing_time AS
+	(SELECT DISTINCT
+		C.order_id,
+		((DATE_PART('HOUR', R.pickup_time - C.order_time) * 60 ) + 
+		(DATE_PART('MINUTE', R.pickup_time - C.order_time)) + 
+		(DATE_PART('SECOND', R.pickup_time - C.order_time) / 60 ) ) sub_minute
+	 FROM customer_orders_cleaned C
+	 JOIN runner_orders_cleaned R
+		ON C.order_id = R.order_id
+	 ORDER BY 1)
+
+SELECT 
+	CTE1.order_id,
+	CTE1.num_pizzas,
+	CTE2.sub_minute
+FROM num_pizzas_in_order CTE1
+JOIN order_preparing_time CTE2
+	ON CTE1.order_id = CTE2.order_id
+ORDER BY 2;
+```
+
+| order_id | num_pizzas | sub_minute         |
+| -------- | ---------- | ------------------ |
+| 1        | 1          | 10.533333333333333 |
+| 2        | 1          | 10.033333333333333 |
+| 7        | 1          | 10.266666666666667 |
+| 8        | 1          | 20.483333333333334 |
+| 9        | 1          |                    |
+| 5        | 1          | 10.466666666666667 |
+| 6        | 1          |                    |
+| 3        | 2          | 21.233333333333334 |
+| 10       | 2          | 15.516666666666667 |
+| 4        | 3          | 29.283333333333335 |
