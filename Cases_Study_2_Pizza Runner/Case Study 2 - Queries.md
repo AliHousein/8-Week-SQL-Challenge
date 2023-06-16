@@ -802,3 +802,60 @@ FROM runner_orders_cleaned;
 | long_time  | short_time | diff_long_short |
 | ---------- | ---------- | --------------- |
 | 40         | 10         | 30              |
+
+
+6. What was the average speed for each runner for each delivery and do you notice any trend for these values?
+
+```sql
+SELECT
+	runner_id,
+	AVG(distance_km) avg_distance,
+	AVG(duration_minutes) avg_duration,
+	AVG(distance_km / duration_minutes) avg_speed
+FROM runner_orders_cleaned
+GROUP BY 1
+ORDER BY 1;
+```
+
+| runner_id | avg_distance       | avg_duration       | avg_speed          |
+| --------- | ------------------ | ------------------ | ------------------ |
+| 1         | 15.85              | 22.25              | 0.7589351851851851 |
+| 2         | 23.933333333333334 | 26.666666666666668 | 1.0483333333333331 |
+| 3         | 10                 | 15                 | 0.6666666666666666 |
+
+**Soultion:** Yes, the trend makes sense, the greater the distance required to deliver the order, the longer the time to deliver the order.
+
+
+7. What is the successful delivery percentage for each runner?
+
+```sql
+WITH all_orders_of_runners AS
+	(SELECT 
+		runner_id,
+		COUNT(order_id) :: DOUBLE PRECISION  num_orders
+	 FROM runner_orders_cleaned
+	 GROUP BY 1),
+
+successful_orders_of_runners AS
+	(SELECT 
+		runner_id,
+		COUNT(cancellation) :: DOUBLE PRECISION  num_delivered_orders
+	 FROM runner_orders_cleaned
+	 WHERE cancellation LIKE 'Not Canceled'
+	 GROUP BY 1)
+
+SELECT 
+	C1.runner_id,
+	C1.num_orders,
+	C2.num_delivered_orders,
+	(C2.num_delivered_orders / C1.num_orders) * 100 succ_percentage
+FROM all_orders_of_runners C1
+JOIN successful_orders_of_runners C2
+	ON C1.runner_id = C2.runner_id;
+```
+
+| runner_id | num_orders | num_delivered_orders | succ_percentage |
+| --------- | ---------- | -------------------- | --------------- |
+| 3         | 2          | 1                    | 50              |
+| 2         | 4          | 3                    | 75              |
+| 1         | 4          | 4                    | 100             |
