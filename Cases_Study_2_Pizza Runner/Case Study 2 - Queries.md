@@ -599,3 +599,71 @@ GROUP BY 1;
 | 103         | 3                 | 0                   |
 | 104         | 2                 | 1                   |
 | 105         | 1                 | 0                   |
+
+
+8. How many pizzas were delivered that had both exclusions and extras?
+
+```sql
+SELECT
+	SUM(CASE
+		WHEN C.row_id IN (SELECT row_id
+				  FROM extras_cleaned)
+		AND C.row_id IN (SELECT row_id
+				 FROM exclusions_cleaned)
+		THEN 1
+		ELSE 0
+	    END) num_full_changed_pizza
+FROM customer_orders_cleaned C
+JOIN runner_orders_cleaned R
+	ON C.order_id = R.order_id
+	AND R.cancellation LIKE 'Not Canceled';
+```
+
+| num_full_changed_pizza  |
+| ----------------------- |
+| 1                       |
+
+
+9. What was the total volume of pizzas ordered for each hour of the day?
+
+```sql
+SELECT
+	DATE_TRUNC('HOUR', order_time) hour_of_day,
+	COUNT(pizza_id) num_ordered_pizza
+FROM customer_orders_cleaned
+GROUP BY 1
+ORDER BY 1;
+```
+
+| hour_of_day              | num_ordered_pizza |
+| ------------------------ | ----------------- |
+| 2020-01-01T18:00:00.000Z | 1                 |
+| 2020-01-01T19:00:00.000Z | 1                 |
+| 2020-01-02T23:00:00.000Z | 2                 |
+| 2020-01-04T13:00:00.000Z | 3                 |
+| 2020-01-08T21:00:00.000Z | 3                 |
+| 2020-01-09T23:00:00.000Z | 1                 |
+| 2020-01-10T11:00:00.000Z | 1                 |
+| 2020-01-11T18:00:00.000Z | 2                 |
+
+
+10. What was the volume of orders for each day of the week?
+
+```sql
+SELECT
+	('{Sun,Mon,Tue,Wed,Thu,Fri,Sat}'::text[])[EXTRACT(dow FROM order_time) + 1] day_of_week,
+	COUNT(order_id) num_orders
+FROM customer_orders_cleaned
+GROUP BY 1;
+```
+
+| day_of_week              | num_orders        |
+| ------------------------ | ----------------- |
+| Wed 			   | 5                 |
+| Fri 			   | 1                 |
+| Thu 			   | 3                 |
+| Sat 			   | 5                 |
+
+---
+
+#### b. Runner and Customer Experience:
