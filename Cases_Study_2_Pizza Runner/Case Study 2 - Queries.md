@@ -517,3 +517,85 @@ GROUP BY 1;
 | Vegetarian  | 3    		    |
 
 
+5. How many Vegetarian and Meatlovers were ordered by each customer?
+
+```sql
+SELECT
+	C.customer_id,
+	P.pizza_name,
+	COUNT(C.pizza_id) num_ordered_pizza
+FROM customer_orders_cleaned C
+JOIN pizza_names_cleaned P
+	ON C.pizza_id = P.pizza_id
+GROUP BY 1, 2
+ORDER BY 1;
+```
+
+| customer_id | pizza_name | num_ordered_pizza |
+| ----------- | ---------- | ----------------- |
+| 101         | Meatlovers | 2                 |
+| 101         | Vegetarian | 1                 |
+| 102         | Meatlovers | 2                 |
+| 102         | Vegetarian | 1                 |
+| 103         | Meatlovers | 3                 |
+| 103         | Vegetarian | 1                 |
+| 104         | Meatlovers | 3                 |
+| 105         | Vegetarian | 1                 |
+
+
+6. What was the maximum number of pizzas delivered in a single order?
+
+```sql
+SELECT
+	C.order_id,
+	COUNT(C.order_id) num_pizza
+FROM customer_orders_cleaned C
+JOIN runner_orders_cleaned R
+	ON C.order_id = R.order_id
+	AND R.cancellation LIKE 'Not Canceled'
+GROUP BY 1
+ORDER BY 2 DESC
+LIMIT 1;
+```
+
+| order_id  | num_pizza |
+| --------- | --------- |
+| 4         | 3        	|
+
+
+7. For each customer, how many delivered pizzas had at least 1 change and how many had no changes?
+
+```sql
+SELECT
+	C.customer_id,
+	SUM(CASE
+		WHEN C.row_id IN (SELECT row_id
+	       			  FROM extras_cleaned)
+		OR C.row_id IN (SELECT row_id
+	     			FROM exclusions_cleaned)
+		THEN 1
+		ELSE 0
+	    END) num_changed_pizza,
+
+	SUM(CASE
+		WHEN C.row_id NOT IN (SELECT row_id
+	       			      FROM extras_cleaned)
+		AND C.row_id NOT IN (SELECT row_id
+	     			     FROM exclusions_cleaned)
+		THEN 1
+		ELSE 0
+	    END) num_unchanged_pizza
+FROM customer_orders_cleaned C
+JOIN runner_orders_cleaned R
+	ON C.order_id = R.order_id
+	AND R.cancellation LIKE 'Not Canceled'
+GROUP BY 1;
+```
+
+| customer_id | num_changed_pizza | num_unchanged_pizza |
+| ----------- | ----------------- | ------------------- |
+| 101         | 0                 | 2                   |
+| 102         | 0                 | 3                   |
+| 103         | 3                 | 0                   |
+| 104         | 2                 | 1                   |
+| 105         | 1                 | 0                   |
