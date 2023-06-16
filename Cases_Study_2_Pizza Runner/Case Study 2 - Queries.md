@@ -939,3 +939,86 @@ LIMIT 1;
 - Meat Lovers - Exclude Beef
 - Meat Lovers - Extra Bacon
 - Meat Lovers - Exclude Cheese, Bacon - Extra Mushroom, Peppers
+
+**In order to solve this problem we will create a Function called adding_order_description which take one parameter row_id from the table customer_orders_cleaned and return the details of the order like pizza name, exclusions and extras.**
+
+```sql
+-- Function start
+
+CREATE OR REPLACE FUNCTION adding_order_description(row_id_par INT)
+RETURNS TEXT
+LANGUAGE plpgsql
+AS
+$$
+DECLARE
+	adding_pizza_name TEXT;
+	adding_exclusion_name TEXT;
+	adding_extra_name TEXT;
+	final_description TEXT;
+
+BEGIN
+
+	SELECT pizza_name
+	INTO adding_pizza_name
+	FROM pizza_names_cleaned PN
+	JOIN customer_orders_cleaned CO
+		ON PN.pizza_id = CO.pizza_id
+	WHERE CO.row_id = row_id_par;
+
+	SELECT 
+		CASE WHEN array_length(topp_names, 1) IS NULL THEN ''
+		ELSE CONCAT(' - Exclude ', ARRAY_TO_STRING(topp_names, ', '))
+		END
+	INTO adding_exclusion_name
+	FROM
+		(SELECT ARRAY
+			(SELECT PT.topping_name
+			FROM pizza_toppings_cleaned PT
+			JOIN exclusions_cleaned PE
+				ON PT.topping_id = PE.exclusions_id
+			WHERE PE.row_id = row_id_par) topp_names) sub_1;
+
+	SELECT 
+		CASE WHEN array_length(topp_names, 1) IS NULL THEN ''
+		ELSE CONCAT(' - Extra ', ARRAY_TO_STRING(topp_names, ', '))
+		END
+	INTO adding_extra_name
+	FROM
+		(SELECT ARRAY
+			(SELECT PT.topping_name
+			FROM pizza_toppings_cleaned PT
+			JOIN extras_cleaned PE
+				ON PT.topping_id = PE.extras_id
+			WHERE PE.row_id = row_id_par) topp_names) sub_2;
+
+	final_description = adding_pizza_name || adding_exclusion_name || adding_extra_name ;
+	RETURN final_description;
+END;
+$$;
+-- Function end
+
+-- Call the function to get the result
+
+SELECT *,
+	adding_order_description(row_id)
+FROM customer_orders_cleaned;
+
+```
+
+| row_id | order_id | customer_id | pizza_id | order_time               | adding_order_description 					  |
+| ------ | -------- | ----------- | -------- | ------------------------ | --------------------------------------------------------------- |
+| 1      | 1        | 101         | 1        | 2020-01-01T18:05:02.000Z | Meatlovers							  |
+| 2      | 2        | 101         | 1        | 2020-01-01T19:00:52.000Z | Meatlovers							  |
+| 3      | 3        | 102         | 1        | 2020-01-02T23:51:23.000Z | Meatlovers							  |
+| 4      | 3        | 102         | 2        | 2020-01-02T23:51:23.000Z | Vegetarian							  |
+| 5      | 4        | 103         | 1        | 2020-01-04T13:23:46.000Z | Meatlovers - Exclude Cheese					  |
+| 6      | 4        | 103         | 1        | 2020-01-04T13:23:46.000Z | Meatlovers - Exclude Cheese					  |
+| 7      | 4        | 103         | 2        | 2020-01-04T13:23:46.000Z | Vegetarian - Exclude Cheese					  |
+| 8      | 5        | 104         | 1        | 2020-01-08T21:00:29.000Z | Meatlovers - Extra Bacon					  |
+| 9      | 6        | 101         | 2        | 2020-01-08T21:03:13.000Z | Vegetarian							  |
+| 10     | 7        | 105         | 2        | 2020-01-08T21:20:29.000Z | Vegetarian - Extra Bacon					  |
+| 11     | 8        | 102         | 1        | 2020-01-09T23:54:33.000Z | Meatlovers							  |
+| 12     | 9        | 103         | 1        | 2020-01-10T11:22:59.000Z | Meatlovers - Exclude Cheese - Extra Bacon, Chicken		  |
+| 13     | 10       | 104         | 1        | 2020-01-11T18:34:49.000Z | Meatlovers - Exclude BBQ Sauce, Mushrooms - Extra Bacon, Cheese |
+| 14     | 10       | 104         | 1        | 2020-01-11T18:34:49.000Z | Meatlovers							  |
+
