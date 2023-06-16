@@ -913,3 +913,29 @@ LIMIT 1;
 | topping_name  | num_times |
 | ------------- | --------- |
 | Bacon         | 4         |
+
+
+3. What was the most common exclusion?
+
+```sql
+SELECT
+	PT.topping_name,
+	COUNT(PE.exclusions_id) num_times
+FROM pizza_toppings_cleaned PT
+JOIN exclusions_cleaned PE
+	ON PT.topping_id = PE.exclusions_id
+GROUP BY 1
+ORDER BY 2 DESC
+LIMIT 1;
+```
+
+| topping_name  | num_times |
+| ------------- | --------- |
+| Cheese        | 4         |
+
+
+4. Generate an order item for each record in the customers_orders table in the format of one of the following:
+- Meat Lovers
+- Meat Lovers - Exclude Beef
+- Meat Lovers - Extra Bacon
+- Meat Lovers - Exclude Cheese, Bacon - Extra Mushroom, Peppers
