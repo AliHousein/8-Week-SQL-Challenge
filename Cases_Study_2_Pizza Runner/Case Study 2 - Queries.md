@@ -761,3 +761,44 @@ ORDER BY 2;
 **Solution:** In order to discover the relationships more clearly, we need more records (larger database).
 However, according to the current records, yes there is a relationship between the number of pizzas and how long the order takes to prepare in some cases like order_id 3, 4 and 10, the more pizzas in an order, the longer it will take to prepare the order, which makes sense. But in some orders like order_id 8, the order took long time (almost 20 minutes) although the number of pizzas is only one in the order. So as we said we need more data to determine the relatioship clearly.
 			
+
+
+4. What was the average distance travelled for each customer?
+
+```sql
+SELECT
+	customer_id,
+	AVG(distance_km) avg_distance_minutes
+FROM
+	(SELECT DISTINCT
+		C.customer_id,
+		C.order_id,
+		R.distance_km
+	 FROM customer_orders_cleaned C
+	 JOIN runner_orders_cleaned R
+		ON C.order_id = R.order_id) sub_1
+GROUP BY 1
+ORDER BY 1;
+```
+
+| customer_id | avg_distance_minutes |
+| ----------- | -------------------- |
+| 101         | 20                   |
+| 102         | 18.4                 |
+| 103         | 23.4                 |
+| 104         | 10                   |
+| 105         | 25                   |
+
+
+5. What was the difference between the longest and shortest delivery times for all orders?
+
+```sql
+SELECT 
+	MAX(duration_minutes) long_time,
+	MIN(duration_minutes) short_time,
+	MAX(duration_minutes) - MIN(duration_minutes) diff_long_short
+FROM runner_orders_cleaned;
+```
+| long_time  | short_time | diff_long_short |
+| ---------- | ---------- | --------------- |
+| 40         | 10         | 30              |
