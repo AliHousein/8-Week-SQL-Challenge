@@ -859,3 +859,57 @@ JOIN successful_orders_of_runners C2
 | 3         | 2          | 1                    | 50              |
 | 2         | 4          | 3                    | 75              |
 | 1         | 4          | 4                    | 100             |
+
+---
+
+#### c. Ingredient Optimisation:
+
+1. What are the standard ingredients for each pizza?
+
+```sql
+SELECT
+	PN.pizza_name,
+	PT.topping_name
+FROM pizza_names_cleaned PN
+JOIN pizza_recipes_cleaned PR
+	ON PN.pizza_id = PR.pizza_id
+JOIN pizza_toppings_cleaned PT
+	ON PR.topping_id = PT.topping_id
+ORDER BY 1;
+```
+
+| pizza_name | topping_name |
+| ---------- | ------------ |
+| Meatlovers | BBQ Sauce    |
+| Meatlovers | Pepperoni    |
+| Meatlovers | Cheese       |
+| Meatlovers | Salami       |
+| Meatlovers | Chicken      |
+| Meatlovers | Bacon        |
+| Meatlovers | Mushrooms    |
+| Meatlovers | Beef         |
+| Vegetarian | Tomato Sauce |
+| Vegetarian | Cheese       |
+| Vegetarian | Mushrooms    |
+| Vegetarian | Onions       |
+| Vegetarian | Peppers      |
+| Vegetarian | Tomatoes     |
+
+
+2. What was the most commonly added extra?
+
+```sql
+SELECT
+	PT.topping_name,
+	COUNT(PE.extras_id) num_times
+FROM pizza_toppings_cleaned PT
+JOIN extras_cleaned PE
+	ON PT.topping_id = PE.extras_id
+GROUP BY 1
+ORDER BY 2 DESC
+LIMIT 1;
+```
+
+| topping_name  | num_times |
+| ------------- | --------- |
+| Bacon         | 4         |
