@@ -758,6 +758,6 @@ ORDER BY 2;
 | 10       | 2          | 15.516666666666667 |
 | 4        | 3          | 29.283333333333335 |
 
-solution: In order to discover the relationships more clearly, we need more records (larger database).
+**Solution:** In order to discover the relationships more clearly, we need more records (larger database).
 However, according to the current records, yes there is a relationship between the number of pizzas and how long the order takes to prepare in some cases like order_id 3, 4 and 10, the more pizzas in an order, the longer it will take to prepare the order, which makes sense. But in some orders like order_id 8, the order took long time (almost 20 minutes) although the number of pizzas is only one in the order. So as we said we need more data to determine the relatioship clearly.
 			
