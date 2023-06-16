@@ -1125,3 +1125,92 @@ FROM customer_orders_cleaned;
 | 13     | 10       | 104         | 1        | 2020-01-11T18:34:49.000Z | Meatlovers: 2xBacon, Beef, 2xCheese, Chicken, Pepperoni, Salami			|
 | 14     | 10       | 104         | 1        | 2020-01-11T18:34:49.000Z | Meatlovers: Bacon, BBQ Sauce, Beef, Cheese, Chicken, Mushrooms, Pepperoni, Salami	|
 
+
+6. What is the total quantity of each ingredient used in all delivered pizzas sorted by most frequent first?
+
+```sql
+WITH original_toppings AS
+		(SELECT
+			PT.topping_name,
+			COUNT(PR.topping_id) ingredient_quantity
+		FROM pizza_toppings_cleaned PT
+		JOIN pizza_recipes_cleaned PR
+			ON PT.topping_id = PR.topping_id
+		JOIN customer_orders_cleaned CO
+			ON PR.pizza_id = CO.pizza_id
+		JOIN runner_orders_cleaned RO
+			ON CO.order_id = RO.order_id
+			AND RO.cancellation LIKE 'Not Canceled'
+		GROUP BY 1
+		ORDER BY 2 DESC ),
+
+execluded_toppings AS
+		(SELECT 
+			PT.topping_name,
+			COUNT(PE.exclusions_id) execlusions_quantity
+		FROM pizza_toppings_cleaned PT
+		JOIN exclusions_cleaned PE
+			ON PT.topping_id = PE.exclusions_id
+		JOIN customer_orders_cleaned CO
+			ON PE.row_id = CO.row_id
+		JOIN runner_orders_cleaned RO
+			ON CO.order_id = RO.order_id
+			AND RO.cancellation LIKE 'Not Canceled'
+		GROUP BY 1
+		ORDER BY 2 DESC),
+
+extra_toppings AS
+		(SELECT 
+			PT.topping_name,
+			COUNT(PE.extras_id) extras_quantity
+		FROM pizza_toppings_cleaned PT
+		JOIN extras_cleaned PE
+			ON PT.topping_id = PE.extras_id
+		JOIN customer_orders_cleaned CO
+			ON PE.row_id = CO.row_id
+		JOIN runner_orders_cleaned RO
+			ON CO.order_id = RO.order_id
+			AND RO.cancellation LIKE 'Not Canceled'
+		GROUP BY 1
+		ORDER BY 2 DESC)
+
+SELECT 
+	OT.topping_name,
+	CASE 
+		WHEN EXE.execlusions_quantity IS NOT NULL
+			AND EXT.extras_quantity IS NOT NULL
+			THEN OT.ingredient_quantity - EXE.execlusions_quantity + EXT.extras_quantity
+		WHEN EXE.execlusions_quantity IS NOT NULL
+			THEN OT.ingredient_quantity - EXE.execlusions_quantity
+		WHEN EXT.extras_quantity IS NOT NULL
+			THEN OT.ingredient_quantity + EXT.extras_quantity
+		ELSE OT.ingredient_quantity
+	END AS ingredient_quantity
+FROM original_toppings OT
+LEFT JOIN execluded_toppings EXE
+	ON OT.topping_name = EXE.topping_name
+LEFT JOIN extra_toppings EXT
+	ON OT.topping_name = EXT.topping_name
+ORDER BY 2 DESC;
+```
+
+| topping_name | ingredient_quantity |
+| ------------ | ------------------- |
+| Bacon        | 12                  |
+| Mushrooms    | 11                  |
+| Cheese       | 10                  |
+| Pepperoni    | 9                   |
+| Salami       | 9                   |
+| Beef         | 9                   |
+| Chicken      | 9                   |
+| BBQ Sauce    | 8                   |
+| Peppers      | 3                   |
+| Tomato Sauce | 3                   |
+| Onions       | 3                   |
+| Tomatoes     | 3                   |
+
+---
+
+
+#### D. Pricing and Ratings:
+
