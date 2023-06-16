@@ -1005,20 +1005,123 @@ FROM customer_orders_cleaned;
 
 ```
 
-| row_id | order_id | customer_id | pizza_id | order_time               		| adding_order_description 					  |
-| ------ | -------- | ----------- | -------- | ----------------------------------------	| --------------------------------------------------------------- |
-| 1      | 1        | 101         | 1        | 2020-01-01T18:05:02.000Z 		| Meatlovers							  |
-| 2      | 2        | 101         | 1        | 2020-01-01T19:00:52.000Z 		| Meatlovers							  |
-| 3      | 3        | 102         | 1        | 2020-01-02T23:51:23.000Z 		| Meatlovers							  |
-| 4      | 3        | 102         | 2        | 2020-01-02T23:51:23.000Z 		| Vegetarian							  |
-| 5      | 4        | 103         | 1        | 2020-01-04T13:23:46.000Z 		| Meatlovers - Exclude Cheese					  |
-| 6      | 4        | 103         | 1        | 2020-01-04T13:23:46.000Z 		| Meatlovers - Exclude Cheese					  |
-| 7      | 4        | 103         | 2        | 2020-01-04T13:23:46.000Z 		| Vegetarian - Exclude Cheese					  |
-| 8      | 5        | 104         | 1        | 2020-01-08T21:00:29.000Z 		| Meatlovers - Extra Bacon					  |
-| 9      | 6        | 101         | 2        | 2020-01-08T21:03:13.000Z 		| Vegetarian							  |
-| 10     | 7        | 105         | 2        | 2020-01-08T21:20:29.000Z 		| Vegetarian - Extra Bacon					  |
-| 11     | 8        | 102         | 1        | 2020-01-09T23:54:33.000Z 		| Meatlovers							  |
-| 12     | 9        | 103         | 1        | 2020-01-10T11:22:59.000Z 		| Meatlovers - Exclude Cheese - Extra Bacon, Chicken		  |
-| 13     | 10       | 104         | 1        | 2020-01-11T18:34:49.000Z 		| Meatlovers - Exclude BBQ Sauce, Mushrooms - Extra Bacon, Cheese |
-| 14     | 10       | 104         | 1        | 2020-01-11T18:34:49.000Z 		| Meatlovers							  |
+| row_id | order_id | customer_id | pizza_id | order_time               | adding_order_description 					  |
+| ------ | -------- | ----------- | -------- | ------------------------ | --------------------------------------------------------------- |
+| 1      | 1        | 101         | 1        | 2020-01-01T18:05:02.000Z | Meatlovers							  |
+| 2      | 2        | 101         | 1        | 2020-01-01T19:00:52.000Z | Meatlovers							  |
+| 3      | 3        | 102         | 1        | 2020-01-02T23:51:23.000Z | Meatlovers							  |
+| 4      | 3        | 102         | 2        | 2020-01-02T23:51:23.000Z | Vegetarian							  |
+| 5      | 4        | 103         | 1        | 2020-01-04T13:23:46.000Z | Meatlovers - Exclude Cheese					  |
+| 6      | 4        | 103         | 1        | 2020-01-04T13:23:46.000Z | Meatlovers - Exclude Cheese					  |
+| 7      | 4        | 103         | 2        | 2020-01-04T13:23:46.000Z | Vegetarian - Exclude Cheese					  |
+| 8      | 5        | 104         | 1        | 2020-01-08T21:00:29.000Z | Meatlovers - Extra Bacon					  |
+| 9      | 6        | 101         | 2        | 2020-01-08T21:03:13.000Z | Vegetarian							  |
+| 10     | 7        | 105         | 2        | 2020-01-08T21:20:29.000Z | Vegetarian - Extra Bacon					  |
+| 11     | 8        | 102         | 1        | 2020-01-09T23:54:33.000Z | Meatlovers							  |
+| 12     | 9        | 103         | 1        | 2020-01-10T11:22:59.000Z | Meatlovers - Exclude Cheese - Extra Bacon, Chicken		  |
+| 13     | 10       | 104         | 1        | 2020-01-11T18:34:49.000Z | Meatlovers - Exclude BBQ Sauce, Mushrooms - Extra Bacon, Cheese |
+| 14     | 10       | 104         | 1        | 2020-01-11T18:34:49.000Z | Meatlovers							  |
+
+
+
+5. Generate an alphabetically ordered comma separated ingredient list for each pizza order from the customer_orders table and add a 2x in front of any relevant ingredients
+- For example: "Meat Lovers: 2xBacon, Beef, ... , Salami"
+
+**In order to solve this problem we will create a Function called adding_pizza_and_toppings which take one parameter row_id from the table customer_orders_cleaned and return the details of the order like pizza name with its toppings without exclusions and adding 2x to extra ones according to the customer order.**
+
+```sql
+-- Function start
+CREATE OR REPLACE FUNCTION adding_pizza_and_toppings(row_id_par INT)
+RETURNS TEXT
+LANGUAGE plpgsql
+AS
+$$
+DECLARE
+	pizza_order_name TEXT;
+	pizza_toppings_names TEXT;
+	final_description TEXT;
+BEGIN
+
+	SELECT PN.pizza_name
+	INTO pizza_order_name
+	FROM pizza_names_cleaned PN
+	JOIN customer_orders_cleaned CO
+		ON PN.pizza_id = CO.pizza_id
+		AND CO.row_id = row_id_par;
+
+	WITH order_pizza_toppings AS
+			(SELECT
+				PT.topping_name
+			FROM pizza_recipes_cleaned PR
+			JOIN pizza_toppings_cleaned PT
+				ON PR.topping_id = PT.topping_id
+			JOIN customer_orders_cleaned CO
+				ON CO.pizza_id = PR.pizza_id
+			WHERE CO.row_id = row_id_par
+			ORDER BY 1),
+
+	order_pizza_exclusions AS
+			(SELECT topping_name
+			FROM order_pizza_toppings
+			WHERE topping_name NOT IN (
+					SELECT topping_name
+					FROM pizza_toppings_cleaned PT
+					JOIN exclusions_cleaned PE 
+						ON PT.topping_id = PE.exclusions_id
+						AND PE.row_id = row_id_par)),
+
+	order_pizza_extras AS
+		(SELECT 
+			topping_name
+		FROM pizza_toppings_cleaned PT
+		JOIN extras_cleaned PE
+			ON PT.topping_id = PE.extras_id
+			AND PE.row_id = row_id_par)
+
+	SELECT ARRAY_TO_STRING(all_toppings, ', ')
+	INTO pizza_toppings_names
+	FROM
+		(SELECT ARRAY
+			(SELECT 
+				CASE 
+					WHEN topping_name IN 
+							(SELECT *
+							FROM order_pizza_extras)
+						THEN CONCAT('2x', topping_name)
+					ELSE topping_name
+				END
+			FROM order_pizza_exclusions) all_toppings) sub_1;
+
+	final_description = pizza_order_name || ': ' || pizza_toppings_names;
+
+	RETURN final_description;
+END;
+$$;
+
+-- Function end
+
+-- Call the function to get the result
+
+SELECT *,
+	adding_pizza_and_toppings(row_id)
+FROM customer_orders_cleaned;
+
+```
+
+| row_id | order_id | customer_id | pizza_id | order_time               | adding_pizza_and_toppings 					  			|
+| ------ | -------- | ----------- | -------- | ------------------------ | ------------------------------------------------------------------------------------- |
+| 1      | 1        | 101         | 1        | 2020-01-01T18:05:02.000Z | Meatlovers: Bacon, BBQ Sauce, Beef, Cheese, Chicken, Mushrooms, Pepperoni, Salami	|
+| 2      | 2        | 101         | 1        | 2020-01-01T19:00:52.000Z | Meatlovers: Bacon, BBQ Sauce, Beef, Cheese, Chicken, Mushrooms, Pepperoni, Salami	|
+| 3      | 3        | 102         | 1        | 2020-01-02T23:51:23.000Z | Meatlovers: Bacon, BBQ Sauce, Beef, Cheese, Chicken, Mushrooms, Pepperoni, Salami	|
+| 4      | 3        | 102         | 2        | 2020-01-02T23:51:23.000Z | Vegetarian: Cheese, Mushrooms, Onions, Peppers, Tomato Sauce, Tomatoes		|
+| 5      | 4        | 103         | 1        | 2020-01-04T13:23:46.000Z | Meatlovers: Bacon, BBQ Sauce, Beef, Chicken, Mushrooms, Pepperoni, Salami		|
+| 6      | 4        | 103         | 1        | 2020-01-04T13:23:46.000Z | Meatlovers: Bacon, BBQ Sauce, Beef, Chicken, Mushrooms, Pepperoni, Salami		|
+| 7      | 4        | 103         | 2        | 2020-01-04T13:23:46.000Z | Vegetarian: Mushrooms, Onions, Peppers, Tomato Sauce, Tomatoes			|
+| 8      | 5        | 104         | 1        | 2020-01-08T21:00:29.000Z | Meatlovers: 2xBacon, BBQ Sauce, Beef, Cheese, Chicken, Mushrooms, Pepperoni, Salami   |
+| 9      | 6        | 101         | 2        | 2020-01-08T21:03:13.000Z | Vegetarian: Cheese, Mushrooms, Onions, Peppers, Tomato Sauce, Tomatoes 		|
+| 10     | 7        | 105         | 2        | 2020-01-08T21:20:29.000Z | Vegetarian: Cheese, Mushrooms, Onions, Peppers, Tomato Sauce, Tomatoes		|
+| 11     | 8        | 102         | 1        | 2020-01-09T23:54:33.000Z | Meatlovers: Bacon, BBQ Sauce, Beef, Cheese, Chicken, Mushrooms, Pepperoni, Salami	|
+| 12     | 9        | 103         | 1        | 2020-01-10T11:22:59.000Z | Meatlovers: 2xBacon, BBQ Sauce, Beef, 2xChicken, Mushrooms, Pepperoni, Salami		|
+| 13     | 10       | 104         | 1        | 2020-01-11T18:34:49.000Z | Meatlovers: 2xBacon, Beef, 2xCheese, Chicken, Pepperoni, Salami			|
+| 14     | 10       | 104         | 1        | 2020-01-11T18:34:49.000Z | Meatlovers: Bacon, BBQ Sauce, Beef, Cheese, Chicken, Mushrooms, Pepperoni, Salami	|
 
