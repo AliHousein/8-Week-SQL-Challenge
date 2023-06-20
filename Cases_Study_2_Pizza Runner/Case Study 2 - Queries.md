@@ -1355,3 +1355,33 @@ ORDER BY 2;
 | 105         | 7        | 2         | 2      | 2020-01-08T21:20:29.000Z | 2020-01-08T21:30:45.000Z | 10.266666666666667               | 25               | 1                  | 1                |
 | 102         | 8        | 2         | 2      | 2020-01-09T23:54:33.000Z | 2020-01-10T00:15:02.000Z | 20.483333333333334               | 15               | 0.6410256410256411 | 1                |
 | 104         | 10       | 1         | 1      | 2020-01-11T18:34:49.000Z | 2020-01-11T18:50:20.000Z | 15.516666666666667               | 10               | 1                  | 2                |
+
+
+5. If a Meat Lovers pizza was $12 and Vegetarian $10 fixed prices with no cost for extras and each runner is paid $0.30 per kilometre traveled - how much money does Pizza Runner have left over after these deliveries?
+
+```sql
+
+WITH total_revenue AS(
+	SELECT 
+		SUM(
+			CASE
+				WHEN CO.pizza_id = 1 THEN 12
+				ELSE 10
+			END) total_revenue
+	FROM customer_orders_cleaned CO
+	JOIN runner_orders_cleaned RO
+		ON CO.order_id = RO.order_id
+		AND RO.cancellation LIKE 'Not Canceled')
+        
+SELECT
+	((SELECT total_revenue
+	  FROM total_revenue) -
+	SUM(0.30 * distance_km)) total_revenue_after_delivery_cost
+FROM runner_orders_cleaned;
+```
+
+| total_revenue_after_delivery_cost  |
+| ---------------------------------- |
+| 94.44                              |
+
+---
