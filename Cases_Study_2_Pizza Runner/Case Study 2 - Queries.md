@@ -1272,3 +1272,86 @@ LEFT JOIN extras_cleaned PE
 
 
 3. The Pizza Runner team now wants to add an additional ratings system that allows customers to rate their runner, how would you design an additional table for this new dataset - generate a schema for this new table and insert your own data for ratings for each successful customer order between 1 to 5.
+
+```sql
+
+DROP TABLE IF EXISTS customer_rating;
+CREATE TEMP TABLE customer_rating(
+	"order_id" INTEGER,
+	"rating" INTEGER);
+            
+INSERT INTO customer_rating ("order_id", "rating")
+	SELECT 
+		order_id,
+		FLOOR(RANDOM()*(5 - 1 + 1)) + 1
+	FROM
+		(SELECT DISTINCT
+			 CO.order_id
+		FROM customer_orders_cleaned CO
+		JOIN runner_orders_cleaned RO
+			ON CO.order_id = RO.order_id
+			AND RO.cancellation LIKE 'Not Canceled') sub_1;
+			
+SELECT *
+FROM customer_rating
+ORDER BY 1;
+```
+
+| order_id | rating |
+| -------- | ------ |
+| 1        | 4      |
+| 2        | 1      |
+| 3        | 2      |
+| 4        | 4      |
+| 5        | 4      |
+| 7        | 2      |
+| 8        | 5      |
+| 10       | 1      |
+
+
+4. Using your newly generated table - can you join all of the information together to form a table which has the following information for successful deliveries?
+- customer_id
+- order_id
+- runner_id
+- rating
+- order_time
+- pickup_time
+- Time between order and pickup
+- Delivery duration
+- Average speed
+- Total number of pizzas
+
+```sql
+
+SELECT DISTINCT
+	CO.customer_id,
+	CO.order_id,
+	RO.runner_id,
+	CR.rating,
+	CO.order_time,
+	RO.pickup_time,
+	((DATE_PART('HOUR', RO.pickup_time - CO.order_time) * 60 ) + 
+	(DATE_PART('MINUTE', RO.pickup_time - CO.order_time)) + 
+	(DATE_PART('SECOND', RO.pickup_time - CO.order_time) / 60 )) minutes_between_order_and_pickup,
+	RO.duration_minutes,
+	RO.duration_minutes / RO.distance_km  speed,
+	COUNT(CO.pizza_id) OVER (PARTITION BY CO.order_id) number_of_pizzas	
+FROM customer_orders_cleaned CO
+JOIN runner_orders_cleaned RO
+	ON CO.order_id = RO.order_id
+	AND RO.cancellation LIKE 'Not Canceled'
+JOIN customer_rating CR
+	ON CO.order_id = CR.order_id
+ORDER BY 2;
+```
+
+| customer_id | order_id | runner_id | rating | order_time               | pickup_time              | minutes_between_order_and_pickup | duration_minutes | speed              | number_of_pizzas |
+| ----------- | -------- | --------- | ------ | ------------------------ | ------------------------ | -------------------------------- | ---------------- | ------------------ | ---------------- |
+| 101         | 1        | 1         | 3      | 2020-01-01T18:05:02.000Z | 2020-01-01T18:15:34.000Z | 10.533333333333333               | 32               | 1.6                | 1                |
+| 101         | 2        | 1         | 2      | 2020-01-01T19:00:52.000Z | 2020-01-01T19:10:54.000Z | 10.033333333333333               | 27               | 1.35               | 1                |
+| 102         | 3        | 1         | 4      | 2020-01-02T23:51:23.000Z | 2020-01-03T00:12:37.000Z | 21.233333333333334               | 20               | 1.4925373134328357 | 2                |
+| 103         | 4        | 2         | 3      | 2020-01-04T13:23:46.000Z | 2020-01-04T13:53:03.000Z | 29.283333333333335               | 40               | 1.7094017094017095 | 3                |
+| 104         | 5        | 3         | 4      | 2020-01-08T21:00:29.000Z | 2020-01-08T21:10:57.000Z | 10.466666666666667               | 15               | 1.5                | 1                |
+| 105         | 7        | 2         | 2      | 2020-01-08T21:20:29.000Z | 2020-01-08T21:30:45.000Z | 10.266666666666667               | 25               | 1                  | 1                |
+| 102         | 8        | 2         | 2      | 2020-01-09T23:54:33.000Z | 2020-01-10T00:15:02.000Z | 20.483333333333334               | 15               | 0.6410256410256411 | 1                |
+| 104         | 10       | 1         | 1      | 2020-01-11T18:34:49.000Z | 2020-01-11T18:50:20.000Z | 15.516666666666667               | 10               | 1                  | 2                |
