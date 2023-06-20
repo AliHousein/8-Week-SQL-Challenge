@@ -1232,3 +1232,41 @@ JOIN runner_orders_cleaned RO
 | total_revenue  |
 | -------------- |
 | 138            |
+
+
+2. What if there was an additional $1 charge for any pizza extras?
+- Add cheese is $1 extra.
+
+```sql
+
+WITH total_revenue AS(
+	SELECT 
+		SUM(
+			CASE
+				WHEN CO.pizza_id = 1 THEN 12
+				ELSE 10
+			END) total_revenue
+	FROM customer_orders_cleaned CO
+	JOIN runner_orders_cleaned RO
+		ON CO.order_id = RO.order_id
+		AND RO.cancellation LIKE 'Not Canceled')
+
+SELECT 
+	((SUM(
+		CASE
+			WHEN PE.row_id IS NOT NULL THEN 1
+			ELSE 0
+		END))) + (SELECT total_revenue
+			  FROM total_revenue) total_revenue_with_extra_charge
+FROM customer_orders_cleaned CO
+JOIN runner_orders_cleaned RO
+	ON CO.order_id = RO.order_id
+	AND RO.cancellation LIKE 'Not Canceled'
+LEFT JOIN extras_cleaned PE
+	ON CO.row_id = PE.row_id;
+ ```
+
+| total_revenue_with_extra_charge  |
+| -------------------------------- |
+| 142                              |
+
