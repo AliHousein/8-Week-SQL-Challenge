@@ -1212,7 +1212,7 @@ ORDER BY 2 DESC;
 ---
 
 
-#### D. Pricing and Ratings:
+#### d. Pricing and Ratings:
 
 1. If a Meat Lovers pizza costs $12 and Vegetarian costs $10 and there were no charges for changes - how much money has Pizza Runner made so far if there are no delivery fees?
 
@@ -1385,3 +1385,34 @@ FROM runner_orders_cleaned;
 | 94.44                              |
 
 ---
+
+
+#### e. Bonus Questions
+
+1. If Danny wants to expand his range of pizzas - how would this impact the existing data design? Write an INSERT statement to demonstrate what would happen if a new Supreme pizza with all the toppings was added to the Pizza Runner menu?
+
+```sql
+INSERT INTO pizza_names_cleaned ("pizza_id", "pizza_name")
+VALUES (3, 'Supreme');
+
+INSERT INTO pizza_recipes_cleaned ("pizza_id", "topping_id")
+VALUES 	(3, 1),
+	(3, 2),
+	(3, 3),
+	(3, 4),
+	(3, 5),
+	(3, 6),
+	(3, 7),
+	(3, 8),
+	(3, 9),
+	(3, 10),
+	(3, 11),
+	(3, 12);
+```
+---
+### Challenge End.
+
+**Follow me in:** 
+Github: 
+LinkedIn: [https://www.linkedin.com/in/ali-housein-697a04153](https://www.linkedin.com/in/ali-housein-697a04153)
+My Portfolio: [https://www.mavenanalytics.io/profile/ali-housein/132827688](https://www.mavenanalytics.io/profile/ali-housein/132827688)
