@@ -1413,6 +1413,6 @@ VALUES 	(3, 1),
 ### Challenge End.
 
 **Follow me in:** 
-Github: 
-LinkedIn: [https://www.linkedin.com/in/ali-housein-697a04153](https://www.linkedin.com/in/ali-housein-697a04153)
-My Portfolio: [https://www.mavenanalytics.io/profile/ali-housein/132827688](https://www.mavenanalytics.io/profile/ali-housein/132827688)
+- Github: 
+- LinkedIn: [https://www.linkedin.com/in/ali-housein-697a04153](https://www.linkedin.com/in/ali-housein-697a04153)
+- My Portfolio: [https://www.mavenanalytics.io/profile/ali-housein/132827688](https://www.mavenanalytics.io/profile/ali-housein/132827688)
